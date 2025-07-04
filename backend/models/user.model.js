@@ -26,7 +26,8 @@ userSchema.pre("save", async function(next){
 
 userSchema.methods.generateToken = async function(){
   try {
-    return jwt.sign({_id:this.id,email:this.email},process.env.JWT_SECRET_KEY,{expiresIn:"7d"})
+    console.log("🔐 Signing with secret:", process.env.JWT_SECRET_KEY);
+    return jwt.sign({_id:this._id,email:this.email},process.env.JWT_SECRET_KEY,{expiresIn:"7d"})
   } catch (error) {
     res.status(500).send("Internal server error in generating token")
   }

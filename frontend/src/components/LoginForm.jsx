@@ -1,9 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-
+import {useAuth} from "../context/AuthContext.jsx"
 export default function LoginForm() {
   const [data, setData] = useState({ email: "", password: "" });
-
+  const {handlelogin} = useAuth()
   const handleChange = (e) =>
     setData({ ...data, [e.target.name]: e.target.value });
 
@@ -12,6 +12,8 @@ export default function LoginForm() {
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, data);
       console.log("User logged in:", res.data);
+      const token = res.data.token
+      handlelogin(token)
       alert("Login successful!");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");

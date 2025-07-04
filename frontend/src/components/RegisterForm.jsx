@@ -1,17 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
-
+import { useAuth } from "../context/AuthContext";
 export default function RegisterForm() {
   const [data, setData] = useState({ name: "", email: "", password: "" });
 
   const handleChange = (e) =>
     setData({ ...data, [e.target.name]: e.target.value });
-
+  const {handlelogin} = useAuth()
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, data);
       console.log("User created:", res.data);
+      const token = res.data.token
+      handlelogin(token)
       alert("Registered successfully!");
     } catch (err) {
       alert(err.response?.data?.message || "Register failed");
